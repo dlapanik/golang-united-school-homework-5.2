@@ -43,7 +43,7 @@ func (c *Cache) Keys() []string {
 
 	for key, value := range c.data {
 		if isExpired(value.deadline, now) {
-			// delete(c.data, key)
+			delete(c.data, key)
 		} else {
 			keys = append(keys, key)
 		}
