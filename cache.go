@@ -22,7 +22,7 @@ func (c *Cache) Get(key string) (string, bool) {
 		return "", false
 	}
 
-	if !value.deadline.IsZero() && value.deadline.Before(time.Now()) {
+	if isExpired(value.deadline, time.Now()) {
 		delete(c.data, key)
 		return "", false
 	}
@@ -42,7 +42,7 @@ func (c *Cache) Keys() []string {
 	now := time.Now()
 
 	for key, value := range c.data {
-		if !value.deadline.IsZero() && value.deadline.Before(now) {
+		if isExpired(value.deadline, now) {
 			delete(c.data, key)
 		} else {
 			keys = append(keys, key)
@@ -57,4 +57,8 @@ func (c *Cache) PutTill(key, value string, deadline time.Time) {
 		value:    value,
 		deadline: deadline,
 	}
+}
+
+func isExpired(time, now time.Time) bool {
+	return !time.IsZero() && (time.Before(now) || time.Equal(now))
 }
