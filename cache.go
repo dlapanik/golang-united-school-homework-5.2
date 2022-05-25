@@ -38,7 +38,7 @@ func (c *Cache) Put(key, value string) {
 }
 
 func (c *Cache) Keys() []string {
-	keys := make([]string, len(c.data))
+	keys := make([]string, 0, len(c.data))
 	now := time.Now()
 
 	for key, value := range c.data {
